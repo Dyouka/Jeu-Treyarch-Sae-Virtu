@@ -1,1 +1,29 @@
-echo "deb [signed-by=/usr/share/keyrings/grafana-keyring.gpg] https://packages.grafana.com/oss/deb stable main" | sudo tee /etc/apt/sources.list.d/grafana.list > /dev/null
+
+- name: Déploiement de l'application
+  hosts: vm-monitoring  # Changer si l'application est sur une autre VM
+  become: yes  # Exécuter en mode root
+
+  tasks:
+    - name: Mettre à jour les paquets
+      apt:
+        update_cache: yes
+
+    - name: Installer Docker (si absent)
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Démarrer et activer Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Supprimer l'ancien conteneur (s'il existe)
+      shell: docker rm -f myapp || true
+
+    - name: Récupérer la dernière version de l'application
+      shell: docker pull 10.1.102.52:5000/myapp  # Change l'IP du registre Docker si nécessaire
+
+    - name: Lancer l'application
+      shell: docker run -d --name myapp -p 8080:80 10.1.102.52:5000/myapp
