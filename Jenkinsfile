@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "10.1.102.51:5000"  // IP de ta VM Docker Registry
-        IMAGE_NAME = "myapp"
-        DEPLOY_SERVER = "10.1.102.50"  // IP de ta VM de déploiement
-        SSH_USER = "rt"  // Ton utilisateur SSH
+        REGISTRY = "10.1.102.51:5000"
+        IMAGE_NAME = "jeu-video"
+        DEPLOY_SERVER = "10.1.102.50"
+        SSH_USER = "rt"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Dyouka/Jeu-Treyarch-Sae-Virtu.git'
+                git branch: 'main', url: 'https://github.com/Dyouka/Jeu-Treyarch-Sae-Virtu.git'
             }
         }
 
