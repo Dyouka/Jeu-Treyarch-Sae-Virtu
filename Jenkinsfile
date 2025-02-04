@@ -2,14 +2,16 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "10.1.102.51:5000"
+        REGISTRY = "10.1.102.51:5000"  // IP de ta VM Docker Registry
         IMAGE_NAME = "myapp"
+        DEPLOY_SERVER = "10.1.102.50"  // IP de ta VM de déploiement
+        SSH_USER = "rt"  // Ton utilisateur SSH
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/Dyouka/https://github.com/Dyouka/Jeu-Treyarch-Sae-Virtu.git'
+                git 'https://github.com/Dyouka/Jeu-Treyarch-Sae-Virtu.git'
             }
         }
 
@@ -19,16 +21,18 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Registry') {
+        stage('Push to Registry') {
             steps {
                 sh 'docker push $REGISTRY/$IMAGE_NAME'
             }
         }
 
-        stage('Deploy via Ansible') {
+        stage('Deploy with Ansible') {
             steps {
                 sshagent(['deploy-key']) {
-                    sh 'ansible-playbook /etc/ansible/deploy_app.yml'
+                    sh '''
+                    ssh $SSH_USER@$DEPLOY_SERVER "ansible-playbook /home/$SSH_USER/deploy_app.yml"
+                    '''
                 }
             }
         }
