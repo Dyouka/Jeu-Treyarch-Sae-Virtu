@@ -4,7 +4,7 @@ pipeline {
     environment {
         REGISTRY = "10.1.102.51:5000"
         IMAGE_NAME = "myapp"
-        DEPLOY_SERVER = "10.1.102.50"
+        DEPLOY_SERVER = "10.1.102.48"
         SSH_USER = "rt"
     }
 
