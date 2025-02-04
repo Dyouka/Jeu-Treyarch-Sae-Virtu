@@ -31,7 +31,7 @@ pipeline {
             steps {
                 sshagent(['deploy-key']) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $SSH_USER@$DEPLOY_SERVER "ansible-playbook /home/$SSH_USER/deploy_app.yml"
+                    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $SSH_USER@$DEPLOY_SERVER "ansible-playbook /etc/ansible/deploy_app.yml"
                     '''
                 }
             }
